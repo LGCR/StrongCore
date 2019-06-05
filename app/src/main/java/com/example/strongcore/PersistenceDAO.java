@@ -9,14 +9,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersistenceDAO extends SQLiteOpenHelper {
+public class PersistenceDAO extends DBCommon {
 
-    private static final String DATABASE = "strongcore";
-    private static final int VERSAO = 5;
-    private static final String TABELA = "persistence";
+    public static final String TABELA = "persistence";
 
     PersistenceDAO(Context context){
-        super(context, DATABASE, null, VERSAO);
+        super(context);
+        if (!tableExists(getReadableDatabase(), TABELA)){
+            onCreate(getWritableDatabase());
+        }
     }
 
     @Override
@@ -63,17 +64,5 @@ public class PersistenceDAO extends SQLiteOpenHelper {
         cv.put("email", user.getEmail());
         String[] args = {user.getEmail()};
         getWritableDatabase().update(TABELA, cv, "email=?", args);
-    }
-
-    public boolean tableExists() {
-        Cursor cursor = getReadableDatabase().rawQuery("SELECT COUNT(*) FROM sqlite_master WHERE type = ? AND name = ?", new String[] {"table", TABELA});
-        if (!cursor.moveToFirst())
-        {
-            cursor.close();
-            return false;
-        }
-        int count = cursor.getInt(0);
-        cursor.close();
-        return count > 0;
     }
 }

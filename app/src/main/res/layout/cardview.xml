@@ -51,22 +51,36 @@
                 android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/header"/>
+                android:layout_below="@+id/header" />
 
             <LinearLayout
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
-                android:gravity="bottom"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
                 android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/startExercise"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:text="INICIAR"
-                android:textSize="25sp"
-                android:textColor="@color/colorAccent"
-                android:background="#292a2b" />
+                <Button
+                    android:id="@+id/startExercise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:text="INICIAR"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginEnd="60dp"
+                    android:textSize="25sp"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:textColor="@color/colorAccent"
+                    android:background="#292a2b" />
+
+                <Button
+                    android:id="@+id/main_see_all_exercises"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:text="VER TODOS"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:textSize="25sp"
+                    android:textColor="@color/colorAccent"
+                    android:background="#292a2b" />
 
             </LinearLayout>
 

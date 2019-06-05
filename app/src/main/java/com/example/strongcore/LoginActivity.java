@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (userDAO != null && userDAO.tableExists()) {
+        if (userDAO != null && userDAO.tableExists(userDAO.getReadableDatabase(), userDAO.TABELA)) {
             users = userDAO.getList();
         }
     }

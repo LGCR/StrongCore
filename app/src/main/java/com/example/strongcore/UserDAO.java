@@ -4,19 +4,17 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAO extends SQLiteOpenHelper {
-
-    private static final String DATABASE = "strongcore";
-    private static final int VERSAO = 5;
-    private static final String TABELA = "users";
+public class UserDAO extends DBCommon {
+    public static final String TABELA = "users";
 
     public UserDAO(Context context) {
-        super(context, DATABASE, null, VERSAO);
+        super(context);
+        if (!tableExists(getReadableDatabase(), TABELA)){
+            onCreate(getWritableDatabase());
+        }
     }
 
     @Override
@@ -90,17 +88,4 @@ public class UserDAO extends SQLiteOpenHelper {
         String[] args = {user.getId().toString()};
         getWritableDatabase().update(TABELA, cv, "id=?", args);
     }
-
-    public boolean tableExists() {
-        Cursor cursor = getReadableDatabase().rawQuery("SELECT COUNT(*) FROM sqlite_master WHERE type = ? AND name = ?", new String[] {"table", TABELA});
-        if (!cursor.moveToFirst())
-        {
-            cursor.close();
-            return false;
-        }
-        int count = cursor.getInt(0);
-        cursor.close();
-        return count > 0;
-    }
-
 }

@@ -8,13 +8,14 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ExerciseListAdapter extends ArrayAdapter<ExerciseModel> {
+public class ExerciseListAdapter extends ArrayAdapter<Exercise> {
 
-    private ArrayList<ExerciseModel> dataSet;
+    private List<Exercise> dataSet;
     Context mContext;
 
-    public ExerciseListAdapter(ArrayList<ExerciseModel> data, Context context) {
+    public ExerciseListAdapter(List<Exercise> data, Context context) {
         super(context, R.layout.listitem, data);
         this.dataSet = data;
         this.mContext=context;
@@ -28,7 +29,7 @@ public class ExerciseListAdapter extends ArrayAdapter<ExerciseModel> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ExerciseModel exerciseModel = getItem(position);
+        Exercise exercise = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 
@@ -49,7 +50,7 @@ public class ExerciseListAdapter extends ArrayAdapter<ExerciseModel> {
             result=convertView;
         }
 
-        viewHolder.txtExercise.setText(exerciseModel.getExercise());
+        viewHolder.txtExercise.setText(dataSet.get(position).getExercise());
         // Return the completed view to render on screen
         return convertView;
     }

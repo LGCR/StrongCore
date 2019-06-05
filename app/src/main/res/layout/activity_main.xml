@@ -24,7 +24,7 @@
             android:textColor="@color/cardview_light_background"
             android:text="Configurações"
             style="?android:attr/borderlessButtonStyle"
-            android:textSize="10dp"
+            android:textSize="8dp"
             android:drawableLeft="@drawable/settings_outline"
             android:drawableStart="@drawable/settings_outline" />
 

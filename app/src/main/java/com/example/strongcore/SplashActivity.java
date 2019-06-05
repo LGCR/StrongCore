@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
                 persistenceDAO = new PersistenceDAO(getApplicationContext());
-                if (persistenceDAO.tableExists() && persistenceDAO.getList().size() > 0) {
+                if (persistenceDAO.tableExists(persistenceDAO.getReadableDatabase(), persistenceDAO.TABELA) && persistenceDAO.getList().size() > 0) {
                     List<Persistence> persistencies = persistenceDAO.getList();
                     UserDAO userDAO = new UserDAO(getApplicationContext());
                     User user = userDAO.getUserByEmail(persistencies.get(0).getEmail());

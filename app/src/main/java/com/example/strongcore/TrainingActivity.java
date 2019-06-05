@@ -1,29 +1,20 @@
 package com.example.strongcore;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
-
-    ViewPager viewPager;
-    ArrayList<Exercise> exercises;
-    public static User user;
-    public ExerciseDAO exerciseDAO;
-    private TrainingDAO trainingDAO;
-    private TrainingExercisesDAO trainingExercisesDAO;
+public class TrainingActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
     private TextToSpeech textToSpeech;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getSupportActionBar().hide();
@@ -52,26 +43,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setContentView(R.layout.activity_main);
-
-        user = (User) getIntent().getSerializableExtra("User");
-
-        viewPager = findViewById(R.id.viewpager);
-        viewPager.setAdapter(new CardAdapter( this));
-
-        exerciseDAO = new ExerciseDAO(getApplicationContext());
-        trainingDAO = new TrainingDAO(getApplicationContext());
-        trainingExercisesDAO = new TrainingExercisesDAO(getApplicationContext());
-
-        final Button configButton = findViewById(R.id.config_button);
-        configButton.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_training);
+        ImageButton imageButton = findViewById(R.id.training_play_pause);
+        final TextView textView = findViewById(R.id.timer_text);
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent configIntent = new Intent(MainActivity.this, ConfigActivity.class);
-                configIntent.putExtra("User", user);
-                MainActivity.this.startActivity(configIntent);
-//                MainActivity.this.finish();
+                ExerciseTimer exerciseTimer = new ExerciseTimer(textView, 30000, 1000);
+                exerciseTimer.start();
+                createTTS();
             }
         });
+    }
+
+    private void createTTS() {
+        textToSpeech = new TextToSpeech(this, this);
+    }
+
+    private void speak(String descricao) {
+        textToSpeech.setLanguage(Locale.getDefault());
+        textToSpeech.speak(descricao, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS){
+            speak("ALFACE");
+        }
     }
 }
