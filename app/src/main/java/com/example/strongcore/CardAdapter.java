@@ -2,6 +2,8 @@ package com.example.strongcore;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.ListView;
 
 import androidx.viewpager.widget.PagerAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +51,8 @@ public class CardAdapter extends PagerAdapter {
             exercises = new ExerciseDAO(context).getList();
             trainings = new TrainingDAO(context).getList();
             trainingExercises = new TrainingExercisesDAO(context).getList();
-            final List<Exercise> tExercise = new ArrayList<>();
+            final ArrayList<Exercise> exerciseFiltered = new ArrayList<>();
+            final ArrayList<TrainingExercise> tExercise = new ArrayList<>();
             for (Training training : trainings){
                 if (training.getnTrainingsCompleted() < 3){
                     t = training;
@@ -59,10 +63,11 @@ public class CardAdapter extends PagerAdapter {
             for (TrainingExercise trainingExercise: trainingExercises){
                 Log.e("ENTROI2", trainingExercise.getIdExercise().toString());
                 if (t.getIdTraining().equals(trainingExercise.getIdTraining())){
-                    tExercise.add(exercises.get(Integer.parseInt(trainingExercise.getIdExercise().toString())));
+                    tExercise.add(trainingExercise);
+                    exerciseFiltered.add(exercises.get(Integer.parseInt(trainingExercise.getIdExercise().toString())));
                 }
             }
-            ExerciseListAdapter adapter = new ExerciseListAdapter(tExercise, context);
+            ExerciseListAdapter adapter = new ExerciseListAdapter(exerciseFiltered, context);
             ListView listView = view.findViewById(R.id.list);
             listView.setAdapter(adapter);
             Button seeAllExercises = view.findViewById(R.id.main_see_all_exercises);
@@ -79,8 +84,18 @@ public class CardAdapter extends PagerAdapter {
                 public void onClick(View v) {
                     Intent training = new Intent(v.getContext(), TrainingActivity.class);
                     training.putExtra("Training", t);
-                    training.putExtra("Exercises", tExercise);
+                    training.putExtra("Exercises", exerciseFiltered);
+                    training.putExtra("TrainingExercises", tExercise);
                     mainActivity.startActivity(training);
+                }
+            });
+        } else {
+            Button editPain = view.findViewById(R.id.editPain);
+            editPain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent editPainIntent = new Intent(v.getContext(), PainActivity.class);
+                    mainActivity.startActivity(editPainIntent);
                 }
             });
         }

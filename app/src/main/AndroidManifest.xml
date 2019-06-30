@@ -38,6 +38,8 @@
 
         <activity android:name="com.example.strongcore.TrainingActivity">
         </activity>
+        <activity android:name="com.example.strongcore.PainActivity">
+        </activity>
     </application>
 
 </manifest>

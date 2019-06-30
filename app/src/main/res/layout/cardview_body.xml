@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/startExercise"
+                    android:id="@+id/editPain"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:text="EDITAR"

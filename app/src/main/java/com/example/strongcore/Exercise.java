@@ -1,6 +1,8 @@
 package com.example.strongcore;
 
-public class Exercise {
+import java.io.Serializable;
+
+public class Exercise implements Serializable {
 
     private Long idExercise;
     private String exercise;

@@ -1,17 +1,35 @@
 package com.example.strongcore;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
-public class TrainingActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
-    private TextToSpeech textToSpeech;
+public class TrainingActivity extends AppCompatActivity {
+    int totalExercises;
+    int currentExercise = 0;
+    ImageButton playPauseExercise;
+    TextView timer;
+    TextView sets;
+    ImageView exerciseImg;
+    TextView description;
+    private Training training;
+    private ArrayList<Exercise> exercises;
+    private ArrayList<TrainingExercise> trainingExercises;
+    private TextView time;
+    private TextView title;
+    public ImageButton mute_unmute;
+    public boolean mute;
+    private TrainingThread trainingThread;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,31 +62,92 @@ public class TrainingActivity extends AppCompatActivity implements TextToSpeech.
         });
 
         setContentView(R.layout.activity_training);
-        ImageButton imageButton = findViewById(R.id.training_play_pause);
-        final TextView textView = findViewById(R.id.timer_text);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ExerciseTimer exerciseTimer = new ExerciseTimer(textView, 30000, 1000);
-                exerciseTimer.start();
-                createTTS();
-            }
-        });
+
+        Intent intent = getIntent();
+        training = (Training) intent.getSerializableExtra("Training");
+        exercises = (ArrayList<Exercise>) intent.getSerializableExtra("Exercises");
+        trainingExercises = (ArrayList<TrainingExercise>) intent.getSerializableExtra("TrainingExercises");
+
+        totalExercises = exercises.size();
+
+        playPauseExercise = findViewById(R.id.training_play_pause);
+        timer = findViewById(R.id.timer_text);
+        time = findViewById(R.id.time_text);
+        sets = findViewById(R.id.sets_text);
+        exerciseImg = findViewById(R.id.exerciseImg);
+        description = findViewById(R.id.exerciseDescription);
+        title = findViewById(R.id.exerciseTitle);
+        mute_unmute = findViewById(R.id.mute_unmute_button);
+
+        setResources();
+
+        trainingThread = new TrainingThread(this);
     }
 
-    private void createTTS() {
-        textToSpeech = new TextToSpeech(this, this);
+
+    public void setResources(){
+        exerciseImg.setImageResource(getResources()
+                .getIdentifier(exercises.get(currentExercise)
+                        .getExercise().toLowerCase().replaceAll("\\s+",""), "drawable", getPackageName()));
+        title.setText(exercises.get(currentExercise).getExercise());
+        sets.setText("0 de " + trainingExercises.get(currentExercise).getExerciseSets());
+        time.setText( trainingExercises.get(currentExercise).getExerciseDuration() + "s");
+        timer.setText("00:" + trainingExercises.get(currentExercise).getExerciseDuration());
     }
 
-    private void speak(String descricao) {
-        textToSpeech.setLanguage(Locale.getDefault());
-        textToSpeech.speak(descricao, TextToSpeech.QUEUE_FLUSH, null);
+    public int getTotalExercises() {
+        return totalExercises;
     }
 
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS){
-            speak("ALFACE");
-        }
+    public int getCurrentExercise() {
+        return currentExercise;
+    }
+
+    public ImageButton getPlayPauseExercise() {
+        return playPauseExercise;
+    }
+
+    public TextView getTimer() {
+        return timer;
+    }
+
+    public TextView getSets() {
+        return sets;
+    }
+
+    public ImageView getExerciseImg() {
+        return exerciseImg;
+    }
+
+    public TextView getDescription() {
+        return description;
+    }
+
+    public Training getTraining() {
+        return training;
+    }
+
+    public ArrayList<Exercise> getExercises() {
+        return exercises;
+    }
+
+    public ArrayList<TrainingExercise> getTrainingExercises() {
+        return trainingExercises;
+    }
+
+    public TextView getTime() {
+        return time;
+    }
+
+    public TextView getTitlet() {
+        return title;
+    }
+
+    public ImageButton getMute_unmute() {
+        return mute_unmute;
+    }
+
+    public boolean isMute() {
+        return mute;
     }
 }

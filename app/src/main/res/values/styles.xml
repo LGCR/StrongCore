@@ -18,4 +18,9 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
     </style>
 
+    <style name="RadioButton" parent="AppTheme">
+        <item name="colorAccent">@android:color/white</item>
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
+    </style>
+
 </resources>
