@@ -1,10 +1,17 @@
 package com.example.strongcore;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,8 +22,12 @@ import java.util.List;
 
 public class PainActivity extends AppCompatActivity {
 
-    private View groupView;
+    private ArrayList<Integer> mapBody;
+    private Bitmap mapBodyBitmap, bodyBitmap;
     private RadioButton lastRadioButton;
+    private Canvas bodyCanvas;
+    private BodySectionMapCoordinates bodySectionMapCoordinates;
+    private MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +60,15 @@ public class PainActivity extends AppCompatActivity {
             }
         });
 
+        mapBody = new ArrayList<>();
+        mapBody.add(Color.rgb(255, 0, 0));
+        mapBodyBitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.mapacorpo)).getBitmap();
+        bodyBitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.corpo)).getBitmap();
+        final Bitmap mutableBitmap = bodyBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        bodyCanvas = new Canvas(mutableBitmap);
+        bodyCanvas.drawBitmap(bodyBitmap, 0, 0, null);
+        final ImageView imageView = findViewById(R.id.pain_section_body);
+        imageView.setImageBitmap(bodyBitmap);
         final ExpandableListView elvPainSections = findViewById(R.id.elv_pain_sections);
 
         // cria os itens de cada grupo
@@ -83,7 +103,6 @@ public class PainActivity extends AppCompatActivity {
                     parent.collapseGroup(groupPosition);
                 } else {
                     parent.expandGroup(groupPosition);
-                    groupView = v;
                 }
                 return true;
             }
@@ -102,6 +121,10 @@ public class PainActivity extends AppCompatActivity {
                     radioButton.toggle();
                     lastRadioButton = radioButton;
                 }
+
+                new PaintBodySection(PainActivity.this, mapBodyBitmap,
+                        mutableBitmap, bodyCanvas, imageView, mainActivity, groupPosition, childPosition).start();
+
                 return true;
             }
         });

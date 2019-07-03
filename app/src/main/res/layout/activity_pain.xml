@@ -17,6 +17,12 @@
         android:layout_weight="1.4"
         app:cardBackgroundColor="@color/colorPrimaryDark">
 
+        <ImageView
+            android:id="@+id/pain_section_body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"/>
+
     </androidx.cardview.widget.CardView>
 
     <ExpandableListView

@@ -3,16 +3,19 @@ package com.example.strongcore;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Serializable {
 
     ViewPager viewPager;
     ArrayList<Exercise> exercises;
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TrainingDAO trainingDAO;
     private TrainingExercisesDAO trainingExercisesDAO;
     private TextToSpeech textToSpeech;
+    private HashMap<Integer, ArrayList<String>> coordinates;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,5 +77,9 @@ public class MainActivity extends AppCompatActivity {
 //                MainActivity.this.finish();
             }
         });
+    }
+
+    public void setBodyCoordinates(HashMap<Integer, ArrayList<String>> coordinates) {
+        this.coordinates = coordinates;
     }
 }

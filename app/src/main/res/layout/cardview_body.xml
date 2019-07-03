@@ -24,7 +24,8 @@
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -32,9 +33,7 @@
                     android:text="Dores Osteomusculares"
                     android:textSize="25sp"
                     android:textColor="@color/colorAccent"
-                    android:gravity="center"
-                    android:layout_marginStart="60dp"
-                    android:layout_marginLeft="60dp"/>
+                    android:gravity="center"/>
 
             </LinearLayout>
 

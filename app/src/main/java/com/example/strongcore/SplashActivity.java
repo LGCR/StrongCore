@@ -3,11 +3,14 @@ package com.example.strongcore;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
@@ -15,6 +18,7 @@ public class SplashActivity extends AppCompatActivity {
     /** Duration of wait **/
     private final int SPLASH_DISPLAY_LENGTH = 3000;
     PersistenceDAO persistenceDAO;
+    private HashMap<Integer, ArrayList<String>> coordinates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +45,14 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        final BodySectionMapCoordinates bodySectionMapCoordinates = new BodySectionMapCoordinates(this);
+        bodySectionMapCoordinates.execute();
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/
-        new Handler().postDelayed(new Runnable(){
+        /*new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
+                *//* Create an Intent that will start the Menu-Activity. *//*
                 persistenceDAO = new PersistenceDAO(getApplicationContext());
                 if (persistenceDAO.tableExists(persistenceDAO.getReadableDatabase(), persistenceDAO.TABELA) && persistenceDAO.getList().size() > 0) {
                     List<Persistence> persistencies = persistenceDAO.getList();
@@ -63,6 +69,6 @@ public class SplashActivity extends AppCompatActivity {
                     SplashActivity.this.finish();
                 }
             }
-        }, SPLASH_DISPLAY_LENGTH);
+        }, SPLASH_DISPLAY_LENGTH);*/
     }
 }
