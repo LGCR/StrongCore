@@ -25,6 +25,7 @@ public class PainActivity extends AppCompatActivity {
     private ArrayList<Integer> mapBody;
     private Bitmap mapBodyBitmap, bodyBitmap;
     private RadioButton lastRadioButton;
+    private int lastGroup;
     private Canvas bodyCanvas;
     private BodySectionMapCoordinates bodySectionMapCoordinates;
     private MainActivity mainActivity;
@@ -63,12 +64,18 @@ public class PainActivity extends AppCompatActivity {
         mapBody = new ArrayList<>();
         mapBody.add(Color.rgb(255, 0, 0));
         mapBodyBitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.mapacorpo)).getBitmap();
+        final Bitmap rescaledMap = Bitmap.createScaledBitmap(mapBodyBitmap, mapBodyBitmap.getWidth()/4,
+                mapBodyBitmap.getHeight()/4, false);
         bodyBitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.corpo)).getBitmap();
-        final Bitmap mutableBitmap = bodyBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap rescaledBody = Bitmap.createScaledBitmap(bodyBitmap, bodyBitmap.getWidth()/4,
+                bodyBitmap.getHeight()/4, false);
+        Bitmap rescaled = Bitmap.createScaledBitmap(bodyBitmap, bodyBitmap.getWidth()/4,
+                bodyBitmap.getHeight()/4, false);
+        final Bitmap mutableBitmap = rescaled.copy(Bitmap.Config.ARGB_8888, true);
         bodyCanvas = new Canvas(mutableBitmap);
-        bodyCanvas.drawBitmap(bodyBitmap, 0, 0, null);
+        bodyCanvas.drawBitmap(rescaledBody, 0, 0, null);
         final ImageView imageView = findViewById(R.id.pain_section_body);
-        imageView.setImageBitmap(bodyBitmap);
+        imageView.setImageBitmap(rescaledBody);
         final ExpandableListView elvPainSections = findViewById(R.id.elv_pain_sections);
 
         // cria os itens de cada grupo
@@ -112,7 +119,7 @@ public class PainActivity extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 RadioButton radioButton = v.findViewById(R.id.item_radio_button);
 
-                if (lastRadioButton != null){
+                if (lastRadioButton != null && groupPosition == lastGroup){
                     lastRadioButton.setChecked(false);
                 }
                 if (radioButton.isChecked()) {
@@ -120,10 +127,11 @@ public class PainActivity extends AppCompatActivity {
                 } else {
                     radioButton.toggle();
                     lastRadioButton = radioButton;
+                    lastGroup = groupPosition;
                 }
 
-                new PaintBodySection(PainActivity.this, mapBodyBitmap,
-                        mutableBitmap, bodyCanvas, imageView, mainActivity, groupPosition, childPosition).start();
+                new PaintBodySection(PainActivity.this, rescaledMap,
+                        mutableBitmap, bodyCanvas, imageView, mainActivity, groupPosition, childPosition).execute();
 
                 return true;
             }
